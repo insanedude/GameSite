@@ -13,7 +13,5 @@ public class Game
     public DateTime ReleaseDate { get; set; }
     public string Description { get; set; }
     public string CoverImagePath { get; set; }
-    
-    public ICollection<Review> Reviews { get; set; }
     public ICollection<ForumThread> ForumThreads { get; set; }
 }
