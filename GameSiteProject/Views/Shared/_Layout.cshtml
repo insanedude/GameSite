@@ -11,6 +11,46 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
+            <style>
+                    body {
+                        font-family: TimesNewRoman, sans-serif;
+                        background-color: #f1f1f1;
+                        color: #333;
+                        margin: 0;
+                        padding: 0;
+                    }
+            
+                    header {
+                        background-color: #f1f1f1;
+                        color: white;
+                        padding: 20px;
+                        text-align: center;
+                    }
+            
+                    /*nav {*/
+                    /*    background-color: #f1f1f1;*/
+                    /*    padding: 10px;*/
+                    /*    display: flex;*/
+                    /*    justify-content: center;*/
+                    /*}*/
+                    
+                    nav a {
+                        margin: 0 15px;
+                        text-decoration: none;
+                        color: #4e555b;
+                        font-weight: bold;
+                    }
+            
+                    nav a:hover {
+                        text-decoration: underline;
+                    }
+            
+                    h1 {
+                        font-size: 2.5em;
+                        margin-bottom: 20px;
+                    }
+                    </style>
+            <img src="/lib/GameLens.png" alt="" width="75" height="75"/>
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GameLens</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +111,7 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Vote" asp-action="Index">Голоси</a>
                     </li>
                 </ul>
-            </div>            
+            </div>
         </div>
     </nav>
 </header>

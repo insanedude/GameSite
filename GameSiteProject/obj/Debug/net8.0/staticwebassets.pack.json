@@ -5,12 +5,12 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "C:\\Users\\insan\\RiderProjects\\GameSite\\GameSiteProject\\wwwroot\\favicon.ico",
-      "PackagePath": "staticwebassets\\favicon.ico"
-    },
-    {
       "Id": "C:\\Users\\insan\\RiderProjects\\GameSite\\GameSiteProject\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Users\\insan\\RiderProjects\\GameSite\\GameSiteProject\\wwwroot\\lib\\GameLens.png",
+      "PackagePath": "staticwebassets\\lib\\GameLens.png"
     },
     {
       "Id": "C:\\Users\\insan\\RiderProjects\\GameSite\\GameSiteProject\\wwwroot\\lib\\bootstrap\\LICENSE",
@@ -95,6 +95,10 @@
     {
       "Id": "C:\\Users\\insan\\RiderProjects\\GameSite\\GameSiteProject\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\insan\\RiderProjects\\GameSite\\GameSiteProject\\wwwroot\\lib\\favicon.ico",
+      "PackagePath": "staticwebassets\\lib\\favicon.ico"
     },
     {
       "Id": "C:\\Users\\insan\\RiderProjects\\GameSite\\GameSiteProject\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
