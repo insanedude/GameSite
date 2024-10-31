@@ -17,7 +17,15 @@ namespace GameSiteProject.Controllers
         {
             _context = context;
         }
-
+        
+        public IActionResult Inbox()
+        {
+            // Fetch messages from the database
+            var messages = _context.Messages
+                .Include(m => m.Sender) // Include sender information
+                .ToList();
+            return View(messages);
+        }
         // GET: Message
         public async Task<IActionResult> Index()
         {

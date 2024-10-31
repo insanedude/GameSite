@@ -12,109 +12,76 @@
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
             <style>
-                    body {
-                        font-family: TimesNewRoman, sans-serif;
-                        background-color: #f1f1f1;
-                        color: #333;
-                        margin: 0;
-                        padding: 0;
-                    }
+                body {
+                    font-family: TimesNewRoman, sans-serif;
+                    background-color: #f1f1f1;
+                    color: #333;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                header {
+                    background-color: #f1f1f1;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                }
+
+                nav a {
+                    margin: 0 15px;
+                    text-decoration: none;
+                    color: #4e555b;
+                    font-weight: bold;
+                }
+
+                nav a:hover {
+                    text-decoration: underline;
+                }
+
+                .brand-container {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .navbar-brand {
+                    margin-left: 10px;
+                    font-weight: bold;
+                    color: #4e555b;
+                }
+            </style>
             
-                    header {
-                        background-color: #f1f1f1;
-                        color: white;
-                        padding: 20px;
-                        text-align: center;
-                    }
-            
-                    /*nav {*/
-                    /*    background-color: #f1f1f1;*/
-                    /*    padding: 10px;*/
-                    /*    display: flex;*/
-                    /*    justify-content: center;*/
-                    /*}*/
-                    
-                    nav a {
-                        margin: 0 15px;
-                        text-decoration: none;
-                        color: #4e555b;
-                        font-weight: bold;
-                    }
-            
-                    nav a:hover {
-                        text-decoration: underline;
-                    }
-            
-                    h1 {
-                        font-size: 2.5em;
-                        margin-bottom: 20px;
-                    }
-                    </style>
-            <img src="/lib/GameLens.png" alt="" width="75" height="75"/>
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GameLens</a>
+            <!-- Logo and Title Side by Side -->
+            <div class="brand-container">
+                <img src="/lib/GameLens.png" alt="GameLens Logo" width="75" height="75"/>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GameLens</a>
+            </div>
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Користувачі</a>
-                    </li>
+
+            <div class="btn-group dropdown-hover">
+                <button type="button" class="btn btn-custom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Додати
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Користувачів</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Game" asp-action="Index">Ігри</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="ForumThread" asp-action="Index">Форуми</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Message" asp-action="Index">Повідомлення</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Notification" asp-action="Index">Сповіщення</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Post" asp-action="Index">Пости</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Tag" asp-action="Index">Теги</a></li>
+                    <li><a class="dropdown-item" asp-area="" asp-controller="Vote" asp-action="Index">Голоси</a></li>
                 </ul>
             </div>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Index">Ігри</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="ForumThread" asp-action="Index">Форуми</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Message" asp-action="Index">Повідомлення</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Notification" asp-action="Index">Сповіщення</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="Index">Пости</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Tag" asp-action="Index">Теги</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Vote" asp-action="Index">Голоси</a>
-                    </li>
-                </ul>
-            </div>
+            <!-- Button to go to Messages -->
+            <a class="btn btn-primary ml-2" asp-controller="Message" asp-action="Inbox">Перейти до повідомлень</a>
         </div>
     </nav>
 </header>
+
 <div class="container">
     <main role="main" class="pb-3">
         @RenderBody()
