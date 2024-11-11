@@ -18,8 +18,21 @@ namespace GameSiteProject.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
-            
+
+
+            // Configure the one-to-many relationship between Message and User (SentMessages)
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Sender) // Message has one Sender (User)
+                .WithMany(u => u.SentMessages) // User has many SentMessages
+                .HasForeignKey(m => m.SenderId) // Foreign key for Sender
+                .OnDelete(DeleteBehavior.Cascade); // Optional: configure delete behavior
+
+            // Configure the one-to-many relationship between Message and User (ReceivedMessages)
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Receiver) // Message has one Receiver (User)
+                .WithMany(u => u.ReceivedMessages) // User has many ReceivedMessages
+                .HasForeignKey(m => m.ReceiverId) // Foreign key for Receiver
+                .OnDelete(DeleteBehavior.Cascade); // Optional: configure delete behavior
         }
     }
 }

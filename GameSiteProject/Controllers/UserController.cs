@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using GameSiteProject.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameSiteProject.Controllers
 {
@@ -16,6 +15,74 @@ namespace GameSiteProject.Controllers
         public UserController(GameSiteDbContext context)
         {
             _context = context;
+        }
+
+        // GET: User/Register (Display registration form)
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: User/Register (Handle registration form submission)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        [HttpPost]
+        public async Task<IActionResult> Register(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                // Check if username already exists
+                if (_context.Users.Any(u => u.Username == user.Username))
+                {
+                    ModelState.AddModelError("Username", "Username is already taken.");
+                    return View(user);
+                }
+
+                // Set the CreatedAt property
+                user.DateJoined = DateTime.Now;
+
+                // Add user to the database
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+
+                // Redirect to the home page after successful registration
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(user);
+        }
+
+        // GET: User/Login (Display login form)
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: User/Login (Handle login)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(string username, string password)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Username == username && u.Password == password);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid username or password.");
+                return View();
+            }
+
+            // Set session values on successful login
+            HttpContext.Session.SetInt32("UserId", user.UserId);
+            HttpContext.Session.SetString("Username", user.Username);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        // Logout functionality
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
         }
 
         // GET: User
@@ -147,7 +214,7 @@ namespace GameSiteProject.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.UserId == id);

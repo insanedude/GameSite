@@ -1,37 +1,40 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameSiteProject.Models;
-
-public class User
+namespace GameSiteProject.Models
 {
-    public int UserId { get; set; }
-    [Required]
-    public string Username { get; set; }
-    [Required]
-    [DataType(DataType.EmailAddress)]
-    public string Email { get; set; }
-    [Required]
-    [StringLength(20, MinimumLength = 6)]
-    public string Password { get; set; }
-    [Display(Name = "Date joined")]
-    public DateTime DateJoined { get; set; }
-    [Display(Name = "PFP Path")]
-    public string ProfilePicturePath { get; set; }
-    public string Role { get; set; }
-    [Display(Name = "Total Score")]
-    public int TotalScore { get; set; }
-    [Display(Name = "User info")]
-    public string UserInformation { get; set; }
+    public class User
+    {
+        public int UserId { get; set; }
 
-    public ICollection<ForumThread> ForumThreads { get; set; }
-    public ICollection<Post> Posts { get; set; }
-    public ICollection<Notification> Notifications { get; set; }
-    public ICollection<Vote> Votes { get; set; }
-    [InverseProperty("Sender")]
-    public ICollection<Message> SentMessages { get; set; }
-    [InverseProperty("Receiver")]
-    public ICollection<Message> ReceivedMessages { get; set; }
+        [Required(ErrorMessage = "Username is required.")]
+        [StringLength(50, ErrorMessage = "Username cannot be longer than 50 characters.")]
+        public string Username { get; set; }
+
+        [Required(ErrorMessage = "Email is required.")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Invalid email format.")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Password is required.")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "Password must be between 6 and 20 characters.")]
+        public string Password { get; set; }
+
+        [Display(Name = "Profile Picture URL (Optional)")]
+        [Url(ErrorMessage = "Please enter a valid URL.")]
+        public string ProfilePicturePath { get; set; }
+
+        public DateTime DateJoined { get; set; } = DateTime.Now;
+
+        public string Role { get; set; }
+        public int TotalScore { get; set; }
+        public string UserInformation { get; set; }
+
+        public ICollection<ForumThread> ForumThreads { get; set; }
+        public ICollection<Post> Posts { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
+        public ICollection<Vote> Votes { get; set; }
+        public ICollection<Message> SentMessages { get; set; }
+        public ICollection<Message> ReceivedMessages { get; set; }
+    }
 }

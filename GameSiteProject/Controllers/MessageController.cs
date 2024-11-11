@@ -20,9 +20,8 @@ namespace GameSiteProject.Controllers
         
         public IActionResult Inbox()
         {
-            // Fetch messages from the database
             var messages = _context.Messages
-                .Include(m => m.Sender) // Include sender information
+                .Include(m => m.Sender)
                 .ToList();
             return View(messages);
         }
