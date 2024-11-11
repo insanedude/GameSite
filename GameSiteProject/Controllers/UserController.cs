@@ -1,223 +1,85 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using GameSiteProject.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace GameSiteProject.Controllers
+namespace GameSiteProject.Controllers;
+
+public class UserController : Controller
 {
-    public class UserController : Controller
+    private readonly UserManager<User> userManager;
+    private readonly SignInManager<User> signInManager;
+
+    public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
     {
-        private readonly GameSiteDbContext _context;
+        this.userManager = userManager;
+        this.signInManager = signInManager;
+    }
+    // GET
+    public IActionResult Index()
+    {
+        return View();
+    }    
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
 
-        public UserController(GameSiteDbContext context)
+    [HttpPost]
+    public async Task<IActionResult> Register(RegistrationViewModel model, string? returnUrl = null)
+    {
+        if (ModelState.IsValid)
         {
-            _context = context;
-        }
-
-        // GET: User/Register (Display registration form)
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        // POST: User/Register (Handle registration form submission)
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        [HttpPost]
-        public async Task<IActionResult> Register(User user)
-        {
-            if (ModelState.IsValid)
+            User user = new() { Email = model.Email, UserName = model.Email, Nickname = model.Nickname};
+            var result = await userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
             {
-                // Check if username already exists
-                if (_context.Users.Any(u => u.Username == user.Username))
+                await signInManager.PasswordSignInAsync(user, model.Password, true, false);
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
-                    ModelState.AddModelError("Username", "Username is already taken.");
-                    return View(user);
+                    return Redirect(returnUrl);
                 }
-
-                // Set the CreatedAt property
-                user.DateJoined = DateTime.Now;
-
-                // Add user to the database
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-
-                // Redirect to the home page after successful registration
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Search", "Home");
             }
-
-            return View(user);
         }
+        return View(model);
+    }
 
-        // GET: User/Login (Display login form)
-        public IActionResult Login()
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
+    {
+        if (ModelState.IsValid)
         {
-            return View();
-        }
-
-        // POST: User/Login (Handle login)
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Login(string username, string password)
-        {
-            var user = _context.Users.FirstOrDefault(u => u.Username == username && u.Password == password);
-            if (user == null)
-            {
-                ModelState.AddModelError("", "Invalid username or password.");
-                return View();
-            }
-
-            // Set session values on successful login
-            HttpContext.Session.SetInt32("UserId", user.UserId);
-            HttpContext.Session.SetString("Username", user.Username);
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        // Logout functionality
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Login");
-        }
-
-        // GET: User
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Users.ToListAsync());
-        }
-
-        // GET: User/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // GET: User/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: User/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,Username,Email,Password,DateJoined,ProfilePicturePath,Role,TotalScore,UserInformation")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        // GET: User/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
-        }
-
-        // POST: User/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,Email,Password,DateJoined,ProfilePicturePath,Role,TotalScore,UserInformation")] User user)
-        {
-            if (id != user.UserId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.UserId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        // GET: User/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // POST: User/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
+            var user = await userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
-                _context.Users.Remove(user);
+                var result = await signInManager.PasswordSignInAsync(user, model.Password, false, false);
+                if (result.Succeeded)
+                {
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Search", "Home");
+                }
             }
+        }
+        return View(model);
+    }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.UserId == id);
-        }
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> Logout()
+    {
+        await signInManager.SignOutAsync();
+        return RedirectToAction("Search", "Home");
     }
 }

@@ -1,0 +1,50 @@
+@model GameSiteProject.Models.User
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - Profile</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <div class="brand-container">
+                <img src="/lib/GameLens.png" alt="GameLens Logo" width="75" height="75"/>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GameLens</a>
+            </div>
+
+            <div class="ml-auto">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Home</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Profile Content -->
+<div class="container">
+    <h2>@Model.Username's Profile</h2>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Model.ProfilePicturePath" alt="Profile Picture" class="img-fluid rounded-circle" />
+        </div>
+        <div class="col-md-8">
+            <h3>Information</h3>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Information About User:</strong></p>
+            <p>@Model.UserInformation</p>
+            <a href="@Url.Action("Edit", "User")" class="btn btn-warning">Edit Profile</a>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSiteProject.Models
 {
-    public class GameSiteDbContext : DbContext
+    public class GameSiteDbContext : IdentityDbContext<User>
     {
         public GameSiteDbContext(DbContextOptions<GameSiteDbContext> options) : base(options) { }
 

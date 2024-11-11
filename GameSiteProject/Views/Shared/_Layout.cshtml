@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    ViewData["Title"] = "GameLens";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -9,7 +13,7 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
             <div class="brand-container">
                 <img src="/lib/GameLens.png" alt="GameLens Logo" width="75" height="75"/>
@@ -22,25 +26,23 @@
             </button>
 
             <div class="ml-auto">
-                <!-- Create Discussion Button -->
                 <a href="@Url.Action("Create", "ForumThread")" class="btn btn-primary">Create Discussion</a>
-
-                <!-- Register and Login Buttons -->
-                @if (!User.Identity.IsAuthenticated)
+                
+                @if (ViewData["Username"] == null)
                 {
-                    <a href="@Url.Action("Register", "User")" class="btn btn-success ml-2">Register</a>
-                    <a href="@Url.Action("Login", "User")" class="btn btn-primary ml-2">Login</a>
+                    <a href="@Url.Action("Login", "User")" class="btn btn-primary">Login</a>
+                    <a href="@Url.Action("Register", "User")" class="btn btn-secondary">Register</a>
                 }
                 else
                 {
-                    <!-- Add a logout button or user profile options here -->
-                    <form asp-controller="User" asp-action="Logout" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger ml-2">Logout</button>
-                    </form>
+                    <a href="@Url.Action("Profile", "User")" class="btn btn-info ml-2">
+                        @ViewData["Username"]
+                    </a>
                 }
             </div>
 
-            <div class="btn-group dropdown-hover">
+            <!-- Dropdown for Add section (Додати) -->
+            <div class="btn-group dropdown">
                 <button type="button" class="btn btn-custom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Додати
                 </button>
@@ -59,15 +61,20 @@
     </nav>
 </header>
 
+<!-- Main Content -->
 <div class="container">
     <main role="main" class="pb-3">
-        @RenderBody()
+        @RenderBody() <!-- This is where the content of the current view will be inserted -->
     </main>
 </div>
 
+<!-- Bootstrap and jQuery JS -->
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
