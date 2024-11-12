@@ -141,25 +141,25 @@ public class UserController : Controller
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string id, EditViewModel evm)
-    {
-        var user = await _userManager.FindByIdAsync(evm.Id);
-        // if (user == null)
-        // {
-        //     return NotFound();
-        // }
-        if (id != user.Id)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            user.Nickname = evm.Nickname;
-            await _userManager.UpdateAsync(user);
-        }
-        return View(user);
-    }
+    // public async Task<IActionResult> Edit(string id, EditViewModel evm)
+    // {
+    //     var user = await _userManager.FindByIdAsync(evm.Id);
+    //     // if (user == null)
+    //     // {
+    //     //     return NotFound();
+    //     // }
+    //     if (id != user.Id)
+    //     {
+    //         return NotFound();
+    //     }
+    //
+    //     if (ModelState.IsValid)
+    //     {
+    //         user.Nickname = evm.Nickname;
+    //         await _userManager.UpdateAsync(user);
+    //     }
+    //     return View(user);
+    // }
     
     public async Task<IActionResult> Delete(string? id)
     {
@@ -176,5 +176,72 @@ public class UserController : Controller
         }
 
         return View(user);
+    }
+    [Authorize]
+    public async Task<IActionResult> Profile()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        ViewData["HideHeader"] = true; // Set flag to hide header in this view
+        return View(user);
+    }
+    
+    [HttpGet]
+    [Route("User/EditUser")]
+    public async Task<IActionResult> EditUser()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var model = new EditViewModel
+        {
+            Id = user.Id,
+            Nickname = user.Nickname,
+            Email = user.Email,
+            ProfilePicturePath = user.ProfilePicturePath,
+            UserInformation = user.UserInformation
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditUser(EditViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        user.Nickname = model.Nickname;
+        user.Email = model.Email;
+        user.ProfilePicturePath = model.ProfilePicturePath;
+        user.UserInformation = model.UserInformation;
+
+        if (!string.IsNullOrEmpty(model.Password))
+        {
+            var removePasswordResult = await _userManager.RemovePasswordAsync(user);
+            if (removePasswordResult.Succeeded)
+            {
+                await _userManager.AddPasswordAsync(user, model.Password);
+            }
+        }
+
+        await _userManager.UpdateAsync(user);
+        return RedirectToAction("Profile");
     }
 }

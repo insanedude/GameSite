@@ -11,20 +11,15 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <div class="brand-container">
-                <img src="/lib/GameLens.png" alt="GameLens Logo" width="75" height="75"/>
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GameLens</a>
+    @if (!(ViewData["HideHeader"] as bool? ?? false))
+    {
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <!-- Place your logo, navigation links, etc., here -->
             </div>
-
-            <div class="ml-auto">
-                <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Home</a>
-            </div>
-        </div>
-    </nav>
+        </nav>
+    }
 </header>
-
 <!-- Profile Content -->
 <div class="container">
     <h2>@Model.Nickname's Profile</h2>
@@ -38,7 +33,7 @@
             <p><strong>Email:</strong> @Model.Email</p>
             <p><strong>Information About User:</strong></p>
             <p>@Model.UserInformation</p>
-            <a href="@Url.Action("Edit", "User")" class="btn btn-warning">Edit Profile</a>
+            <a asp-controller="User" asp-action="EditUser" class="btn btn-warning">Edit Profile</a>       
         </div>
     </div>
 </div>

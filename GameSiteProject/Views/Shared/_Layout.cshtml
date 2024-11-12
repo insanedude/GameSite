@@ -5,19 +5,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - GameLens</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
 <header>
     <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <div class="brand-container">
-                <img src="/lib/GameLens.png" alt="GameLens Logo" width="75" height="75"/>
+            <div class="brand-container d-flex align-items-center">
+                <img src="/lib/GameLens.png" alt="GameLens Logo" width="75" height="75" />
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GameLens</a>
+                
+                <!-- Nickname Button -->
+                @if (User.Identity.IsAuthenticated && ViewBag.Nickname != null)
+                {
+                    <a asp-controller="User" asp-action="Profile" class="btn btn-outline-primary ml-3">
+                        @ViewBag.Nickname
+                    </a>
+                }
             </div>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -30,20 +38,17 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <!-- Display Logout button if user is logged in -->
                     <form action="@Url.Action("Logout", "User")" method="post" class="d-inline">
                         <button type="submit" class="btn btn-danger">Logout</button>
                     </form>
                 }
                 else
                 {
-                    <!-- Display Login and Register buttons if user is not logged in -->
                     <a href="@Url.Action("Login", "User")" class="btn btn-primary">Login</a>
                     <a href="@Url.Action("Register", "User")" class="btn btn-secondary">Register</a>
                 }
             </div>
 
-            <!-- Dropdown for Add section (Додати) -->
             @if (User.IsInRole("Admin"))
             {
                 <div class="btn-group dropdown">
@@ -69,7 +74,7 @@
 <!-- Main Content -->
 <div class="container">
     <main role="main" class="pb-3">
-        @RenderBody() <!-- This is where the content of the current view will be inserted -->
+        @RenderBody()
     </main>
 </div>
 
