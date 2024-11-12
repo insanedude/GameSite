@@ -14,7 +14,7 @@ public class ForumThread
     public Game Game { get; set; }
     
     [ForeignKey("User")]
-    public int? UserId { get; set; }
+    public string? UserId { get; set; }
     public User User { get; set; }
 
     [Display(Name = "Date created")]

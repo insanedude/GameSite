@@ -27,24 +27,26 @@
 
             <div class="ml-auto">
                 <a href="@Url.Action("Create", "ForumThread")" class="btn btn-primary">Create Discussion</a>
-                
-                @if (ViewData["Username"] == null)
+
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <a href="@Url.Action("Login", "User")" class="btn btn-primary">Login</a>
-                    <a href="@Url.Action("Register", "User")" class="btn btn-secondary">Register</a>
+                    <!-- Display Logout button if user is logged in -->
+                    <form action="@Url.Action("Logout", "User")" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
                 }
                 else
                 {
-                    <a href="@Url.Action("Profile", "User")" class="btn btn-info ml-2">
-                        @ViewData["Username"]
-                    </a>
+                    <!-- Display Login and Register buttons if user is not logged in -->
+                    <a href="@Url.Action("Login", "User")" class="btn btn-primary">Login</a>
+                    <a href="@Url.Action("Register", "User")" class="btn btn-secondary">Register</a>
                 }
             </div>
 
             <!-- Dropdown for Add section (Додати) -->
             <div class="btn-group dropdown">
                 <button type="button" class="btn btn-custom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Додати
+                    CRUD
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Користувачів</a></li>
@@ -68,7 +70,6 @@
     </main>
 </div>
 
-<!-- Bootstrap and jQuery JS -->
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>

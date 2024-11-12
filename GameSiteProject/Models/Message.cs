@@ -10,12 +10,12 @@ public class Message
     
     [ForeignKey("SenderId")]
     [InverseProperty("SentMessages")]
-    public int? SenderId { get; set; }
+    public string? SenderId { get; set; }
     public User Sender { get; set; }
     
     [ForeignKey("ReceiverId")]
     [InverseProperty("ReceivedMessages")]
-    public int? ReceiverId { get; set; }
+    public string? ReceiverId { get; set; }
     public User Receiver { get; set; }
     
     public string Content { get; set; }

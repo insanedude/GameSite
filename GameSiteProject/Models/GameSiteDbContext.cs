@@ -7,7 +7,7 @@ namespace GameSiteProject.Models
     {
         public GameSiteDbContext(DbContextOptions<GameSiteDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> User { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<ForumThread> ForumThreads { get; set; }
         public DbSet<Post> Posts { get; set; }
@@ -26,14 +26,14 @@ namespace GameSiteProject.Models
                 .HasOne(m => m.Sender) // Message has one Sender (User)
                 .WithMany(u => u.SentMessages) // User has many SentMessages
                 .HasForeignKey(m => m.SenderId) // Foreign key for Sender
-                .OnDelete(DeleteBehavior.Cascade); // Optional: configure delete behavior
+                .OnDelete(DeleteBehavior.ClientCascade); // Optional: configure delete behavior
 
             // Configure the one-to-many relationship between Message and User (ReceivedMessages)
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Receiver) // Message has one Receiver (User)
                 .WithMany(u => u.ReceivedMessages) // User has many ReceivedMessages
                 .HasForeignKey(m => m.ReceiverId) // Foreign key for Receiver
-                .OnDelete(DeleteBehavior.Cascade); // Optional: configure delete behavior
+                .OnDelete(DeleteBehavior.ClientCascade); // Optional: configure delete behavior
         }
     }
 }
