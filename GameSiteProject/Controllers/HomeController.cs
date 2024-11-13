@@ -36,8 +36,9 @@ namespace GameSiteProject.Controllers
             }
 
             var forumThreads = await _context.ForumThreads
-                .Include(f => f.Game)  // Assuming ForumThread has a Game navigation property
-                .OrderByDescending(f => f.DateCreated)  // Order by creation date or other criteria
+                .Include(f => f.Game)
+                .Include(f => f.User)
+                .OrderByDescending(f => f.DateCreated)
                 .ToListAsync();
 
             return View(forumThreads);

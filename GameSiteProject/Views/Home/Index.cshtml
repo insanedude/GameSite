@@ -12,7 +12,7 @@
 {
     <div class="forum-thread">
         <p>Game: @thread.Game.Title</p>
-        <p>Created by: @(thread.User?.Nickname ?? "Unknown")</p> <!-- Null check added here -->
+        <p>Created by: @thread.User.Nickname</p>
         <p>Posted on: @thread.DateCreated.ToString("MM/dd/yyyy")</p>
     </div>
 }
