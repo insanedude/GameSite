@@ -12,7 +12,7 @@ public class ForumThread
     [ForeignKey("Game")]
     public int? GameId { get; set; }
     public Game Game { get; set; }
-    
+    public string Description { get; set; }
     [ForeignKey("User")]
     public string? UserId { get; set; }
     public User User { get; set; }

@@ -33,6 +33,9 @@ namespace GameSiteProject.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("GameId")
                         .HasColumnType("int");
 

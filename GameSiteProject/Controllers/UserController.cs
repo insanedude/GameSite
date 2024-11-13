@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using GameSiteProject.Models;
+using GameSiteProject.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -56,7 +57,8 @@ public class UserController : Controller
     {
         if (ModelState.IsValid)
         {
-            User user = new() { Email = model.Email, UserName = model.Email, Nickname = model.Nickname};
+            User user = new() { Email = model.Email, UserName = model.Email, Nickname = model.Nickname, 
+                ProfilePicturePath = model.ProfilePicturePath, UserInformation = model.UserInformation};
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {

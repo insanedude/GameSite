@@ -1,0 +1,30 @@
+@model IEnumerable<GameSiteProject.Models.Message>
+
+<h2>Your Private Messages</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Sender</th>
+        <th>Receiver</th>
+        <th>Content</th>
+        <th>Date Sent</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var message in Model)
+    {
+        <tr>
+            <td>@message.Sender.UserName</td>
+            <td>@message.Receiver.UserName</td>
+            <td>@message.Content</td>
+            <td>@message.DateSent</td>
+            <td>@(message.IsRead ? "Read" : "Unread")</td>
+        </tr>
+    }
+    </tbody>
+</table>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>

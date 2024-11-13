@@ -30,6 +30,11 @@ namespace GameSiteProject
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/User/Login";
+                options.AccessDeniedPath = "/User/AccessDenied";
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,11 +54,16 @@ namespace GameSiteProject
             app.UseRouting();
             app.UseSession();
             app.UseStaticFiles();
+            app.UseAuthorization();
+            app.UseAuthentication();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Messages}/{action=PrivateMessages}/{id?}");
             });
         }
     }

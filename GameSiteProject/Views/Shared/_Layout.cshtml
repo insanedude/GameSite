@@ -23,6 +23,10 @@
                     <a asp-controller="User" asp-action="Profile" class="btn btn-outline-primary ml-3">
                         @ViewBag.Nickname
                     </a>
+                    <!-- Send Private Message Button -->
+                    <a href="@Url.Action("SendPrivateMessage", "Message")" class="btn btn-outline-primary ml-3">
+                        Send Private Message
+                    </a>
                 }
             </div>
 
@@ -32,7 +36,7 @@
             </button>
 
             <div class="ml-auto">
-                <a href="@Url.Action("Create", "ForumThread")" class="btn btn-primary">Create Discussion</a>
+                <a href="@Url.Action("CreateDiscussion", "ForumThread")" class="btn btn-primary">Create Discussion</a>
 
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -50,7 +54,7 @@
             @if (User.IsInRole("Admin"))
             {
                 <div class="btn-group dropdown">
-                    <button type="button" class="btn btn-custom dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-custom dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         CRUD
                     </button>
                     <ul class="dropdown-menu">

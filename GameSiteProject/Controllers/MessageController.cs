@@ -6,23 +6,39 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GameSiteProject.Models;
+using GameSiteProject.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace GameSiteProject.Controllers
 {
     public class MessageController : Controller
     {
         private readonly GameSiteDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public MessageController(GameSiteDbContext context)
+        public MessageController(GameSiteDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Message
         public async Task<IActionResult> Index()
         {
-            var gameSiteDbContext = _context.Messages.Include(m => m.Receiver).Include(m => m.Sender);
-            return View(await gameSiteDbContext.ToListAsync());
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var messages = await _context.Messages
+                .Where(m => m.SenderId == currentUser.Id || m.ReceiverId == currentUser.Id)
+                .Include(m => m.Receiver)
+                .Include(m => m.Sender)
+                .OrderByDescending(m => m.DateSent) // Optional: show most recent messages first
+                .ToListAsync();
+
+            return View(messages);
         }
 
         // GET: Message/Details/5
@@ -164,6 +180,68 @@ namespace GameSiteProject.Controllers
         private bool MessageExists(int id)
         {
             return _context.Messages.Any(e => e.MessageId == id);
+        }
+        
+        // GET: Message/SendPrivateMessage
+        public IActionResult SendPrivateMessage()
+        {
+            return View();
+        }
+
+        // POST: Message/SendPrivateMessage
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendPrivateMessage(PrivateMessageViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var sender = await _userManager.GetUserAsync(User); // Get the logged-in user (sender)
+                if (sender == null)
+                {
+                    return NotFound();
+                }
+
+                // Find the receiver by username
+                var receiver = await _userManager.FindByNameAsync(model.ReceiverUsername); 
+                if (receiver == null)
+                {
+                    ModelState.AddModelError("ReceiverUsername", "Receiver not found."); // Add specific error to the field
+                    return View(model); // Return the view with the error message
+                }
+
+                var message = new Message
+                {
+                    SenderId = sender.Id,
+                    ReceiverId = receiver.Id,
+                    Content = model.Content,
+                    DateSent = DateTime.Now,
+                    IsRead = false
+                };
+
+                _context.Add(message);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index)); // Redirect to the message index or another page
+            }
+
+            return View(model); // Return the view with model state errors
+        }
+        
+        public async Task<IActionResult> PrivateMessages()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var messages = await _context.Messages
+                .Where(m => m.SenderId == currentUser.Id || m.ReceiverId == currentUser.Id)
+                .Include(m => m.Sender)
+                .Include(m => m.Receiver)
+                .OrderByDescending(m => m.DateSent)
+                .ToListAsync();
+
+            return View(messages);
         }
     }
 }
