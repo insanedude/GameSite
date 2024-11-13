@@ -1,20 +1,40 @@
-@model GameSiteProject.ViewModels.PrivateMessageViewModel
+@model GameSiteProject.Models.ViewModels.PrivateMessageViewModel
+@{
+    Layout = "_Layout";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Send Private Message</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css"/>
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">Send Private Message</h1>
+    <form asp-action="SendPrivateMessage" method="post">
+        <div class="form-group">
+            <label asp-for="ReceiverNickname" class="control-label"></label>
+            <input asp-for="ReceiverNickname" class="form-control"/>
+            <span asp-validation-for="ReceiverNickname" class="text-danger"></span>
+        </div>
 
-<h2>@ViewData["Title"]</h2>
+        <div class="form-group">
+            <label asp-for="Content" class="control-label"></label>
+            <textarea asp-for="Content" class="form-control"></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
 
-<form asp-action="SendPrivateMessage" method="post">
-    <div class="form-group">
-        <label for="ReceiverUsername">Recipient's Username</label>
-        <input type="text" id="ReceiverUsername" name="ReceiverUsername" class="form-control" required />
-    </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Send Message</button>
+        </div>
+    </form>
+</div>
 
-    <div class="form-group">
-        <label for="Content">Message</label>
-        <textarea id="Content" name="Content" class="form-control" rows="4" required></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Send Message</button>
-</form>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>

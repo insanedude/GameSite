@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace GameSiteProject.ViewModels;
+namespace GameSiteProject.Models.ViewModels;
 
 public class PrivateMessageViewModel
 {
     [Required]
     [Display(Name = "Recipient's Username")]
-    public string ReceiverUsername { get; set; }
+    public string ReceiverNickname { get; set; }
 
     [Required]
     [Display(Name = "Message")]

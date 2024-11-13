@@ -6,28 +6,46 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GameSiteProject.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GameSiteProject.Controllers
 {
     public class VoteController : Controller
     {
         private readonly GameSiteDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public VoteController(GameSiteDbContext context)
+        public VoteController(GameSiteDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
+        }
+        
+        private async Task SetNicknameAsync()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    ViewBag.Nickname = user.Nickname;
+                }
+            }
         }
 
         // GET: Vote
         public async Task<IActionResult> Index()
         {
             var gameSiteDbContext = _context.Votes.Include(v => v.Post).Include(v => v.User);
+            await SetNicknameAsync();
             return View(await gameSiteDbContext.ToListAsync());
         }
 
         // GET: Vote/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            await SetNicknameAsync();
+
             if (id == null)
             {
                 return NotFound();
@@ -48,6 +66,7 @@ namespace GameSiteProject.Controllers
         // GET: Vote/Create
         public IActionResult Create()
         {
+            SetNicknameAsync().Wait();
             ViewData["PostId"] = new SelectList(_context.Posts, "PostId", "PostId");
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Id");
             return View();

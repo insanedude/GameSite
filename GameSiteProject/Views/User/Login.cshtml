@@ -1,4 +1,4 @@
-@model GameSiteProject.ViewModels.LoginViewModel
+@model GameSiteProject.Models.ViewModels.LoginViewModel
 
 <h2>Login</h2>
 
@@ -17,3 +17,9 @@
 
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -6,21 +6,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GameSiteProject.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GameSiteProject.Controllers
 {
     public class TagController : Controller
     {
         private readonly GameSiteDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public TagController(GameSiteDbContext context)
+        public TagController(GameSiteDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
+        }
+        
+        private async Task SetNicknameAsync()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    ViewBag.Nickname = user.Nickname;
+                }
+            }
         }
 
         // GET: Tag
         public async Task<IActionResult> Index()
         {
+            SetNicknameAsync().Wait();
             return View(await _context.Tags.ToListAsync());
         }
 

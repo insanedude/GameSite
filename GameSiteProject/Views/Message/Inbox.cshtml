@@ -1,28 +1,40 @@
-@model IEnumerable<Message>
-
+@model IEnumerable<GameSiteProject.Models.Message>
+@{
+    Layout = "_Layout";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Messages - GameLens</title>
+    <title>Inbox - GameLens</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css"/>
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-4">Особисті повідомлення</h1>
-    <ul class="list-group">
-        @foreach (var message in Model)
-        {
-            <li class="list-group-item">
-                <strong>@message.Sender.Nickname</strong> -> 
-                <strong>@message.Receiver.Nickname:</strong> 
-                @message.Content <br />
-                <small>@message.DateSent.ToString("g")</small>
-            </li>
-        }
-    </ul>
+    <h1 class="mt-4">Inbox</h1>
+    @if (Model.Any())
+    {
+        <ul class="list-group">
+            @foreach (var message in Model)
+            {
+                <li class="list-group-item">
+                    <div>
+                        <strong>@message.Sender.Nickname</strong> 
+                        <span>-></span>
+                        <strong>@message.Receiver.Nickname</strong>
+                    </div>
+                    <p>@message.Content</p>
+                    <small>@message.DateSent.ToString("g")</small>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>You have no messages.</p>
+    }
 </div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

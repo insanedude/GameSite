@@ -18,57 +18,61 @@
             <div class="brand-container d-flex align-items-center">
                 <img src="/lib/GameLens.png" alt="GameLens Logo" width="75" height="75" />
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GameLens</a>
-                @if (User.Identity.IsAuthenticated && ViewBag.Nickname != null)
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <a asp-controller="User" asp-action="Profile" class="btn btn-outline-primary ml-3">
+                    <a asp-controller="User" asp-action="Profile" class="btn btn-primary ml-3">
                         @ViewBag.Nickname
                     </a>
-                    <!-- Send Private Message Button -->
-                    <a href="@Url.Action("SendPrivateMessage", "Message")" class="btn btn-outline-primary ml-3">
+                    <a href="@Url.Action("SendPrivateMessage", "Message")" class="btn btn-primary ml-3">
                         Send Private Message
+                    </a>
+                    <a href="@Url.Action("Inbox", "Message")" class="btn btn-primary ml-3">
+                        View Private Messages
                     </a>
                 }
             </div>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="ml-auto">
-                <a href="@Url.Action("CreateDiscussion", "ForumThread")" class="btn btn-primary">Create Discussion</a>
+            <div class="navbar-collapse collapse" id="navbarNav">
+                <div class="ml-auto">
+                    <a href="@Url.Action("CreateDiscussion", "ForumThread")" class="btn btn-primary">Create Discussion</a>
 
-                @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form action="@Url.Action("Logout", "User")" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "User")" class="btn btn-primary">Login</a>
+                        <a href="@Url.Action("Register", "User")" class="btn btn-secondary">Register</a>
+                    }
+                </div>
+
+                @if (User.IsInRole("Admin"))
                 {
-                    <form action="@Url.Action("Logout", "User")" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger">Logout</button>
-                    </form>
-                }
-                else
-                {
-                    <a href="@Url.Action("Login", "User")" class="btn btn-primary">Login</a>
-                    <a href="@Url.Action("Register", "User")" class="btn btn-secondary">Register</a>
+                    <div class="btn-group dropdown">
+                        <button type="button" class="btn btn-custom dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            CRUD
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Користувачів</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Game" asp-action="Index">Ігри</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="ForumThread" asp-action="Index">Форуми</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Message" asp-action="Index">Повідомлення</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Notification" asp-action="Index">Сповіщення</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Post" asp-action="Index">Пости</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Tag" asp-action="Index">Теги</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Vote" asp-action="Index">Голоси</a></li>
+                        </ul>
+                    </div>
                 }
             </div>
-
-            @if (User.IsInRole("Admin"))
-            {
-                <div class="btn-group dropdown">
-                    <button type="button" class="btn btn-custom dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        CRUD
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Користувачів</a></li>
-                        <li><a class="dropdown-item" asp-area="" asp-controller="Game" asp-action="Index">Ігри</a></li>
-                        <li><a class="dropdown-item" asp-area="" asp-controller="ForumThread" asp-action="Index">Форуми</a></li>
-                        <li><a class="dropdown-item" asp-area="" asp-controller="Message" asp-action="Index">Повідомлення</a></li>
-                        <li><a class="dropdown-item" asp-area="" asp-controller="Notification" asp-action="Index">Сповіщення</a></li>
-                        <li><a class="dropdown-item" asp-area="" asp-controller="Post" asp-action="Index">Пости</a></li>
-                        <li><a class="dropdown-item" asp-area="" asp-controller="Tag" asp-action="Index">Теги</a></li>
-                        <li><a class="dropdown-item" asp-area="" asp-controller="Vote" asp-action="Index">Голоси</a></li>
-                    </ul>
-                </div>
-            }
         </div>
     </nav>
 </header>

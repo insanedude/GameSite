@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GameSiteProject.ViewModels;
+namespace GameSiteProject.Models.ViewModels;
 
 public class RegistrationViewModel
 {

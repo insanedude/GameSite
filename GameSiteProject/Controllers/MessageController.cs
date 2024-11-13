@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GameSiteProject.Models;
-using GameSiteProject.ViewModels;
+using GameSiteProject.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace GameSiteProject.Controllers
@@ -22,14 +22,26 @@ namespace GameSiteProject.Controllers
             _userManager = userManager;
         }
 
+        private async Task SetNicknameAsync()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    ViewBag.Nickname = user.Nickname;
+                }
+            }
+        }
         // GET: Message
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null)
-            {
-                return NotFound();
-            }
+            await SetNicknameAsync();
+            // if (currentUser == null)
+            // {
+            //     return NotFound();
+            // }
 
             var messages = await _context.Messages
                 .Where(m => m.SenderId == currentUser.Id || m.ReceiverId == currentUser.Id)
@@ -44,6 +56,7 @@ namespace GameSiteProject.Controllers
         // GET: Message/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            await SetNicknameAsync();
             if (id == null)
             {
                 return NotFound();
@@ -76,6 +89,7 @@ namespace GameSiteProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MessageId,SenderId,ReceiverId,Content,DateSent,IsRead")] Message message)
         {
+            await SetNicknameAsync();
             if (ModelState.IsValid)
             {
                 _context.Add(message);
@@ -90,6 +104,7 @@ namespace GameSiteProject.Controllers
         // GET: Message/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            await SetNicknameAsync();
             if (id == null)
             {
                 return NotFound();
@@ -112,6 +127,8 @@ namespace GameSiteProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MessageId,SenderId,ReceiverId,Content,DateSent,IsRead")] Message message)
         {
+            await SetNicknameAsync();
+
             if (id != message.MessageId)
             {
                 return NotFound();
@@ -145,6 +162,8 @@ namespace GameSiteProject.Controllers
         // GET: Message/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            await SetNicknameAsync();
+
             if (id == null)
             {
                 return NotFound();
@@ -167,6 +186,8 @@ namespace GameSiteProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            await SetNicknameAsync();
+
             var message = await _context.Messages.FindAsync(id);
             if (message != null)
             {
@@ -185,6 +206,7 @@ namespace GameSiteProject.Controllers
         // GET: Message/SendPrivateMessage
         public IActionResult SendPrivateMessage()
         {
+            SetNicknameAsync().Wait();
             return View();
         }
 
@@ -193,20 +215,24 @@ namespace GameSiteProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendPrivateMessage(PrivateMessageViewModel model)
         {
+            await SetNicknameAsync();
+
             if (ModelState.IsValid)
             {
-                var sender = await _userManager.GetUserAsync(User); // Get the logged-in user (sender)
+                var sender = await _userManager.GetUserAsync(User);
                 if (sender == null)
                 {
                     return NotFound();
                 }
 
-                // Find the receiver by username
-                var receiver = await _userManager.FindByNameAsync(model.ReceiverUsername); 
+                // Find receiver by Nickname instead of Email
+                var receiver = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.Nickname == model.ReceiverNickname); 
+
                 if (receiver == null)
                 {
-                    ModelState.AddModelError("ReceiverUsername", "Receiver not found."); // Add specific error to the field
-                    return View(model); // Return the view with the error message
+                    ModelState.AddModelError("ReceiverNickname", "Receiver not found.");
+                    return View(model);
                 }
 
                 var message = new Message
@@ -220,25 +246,27 @@ namespace GameSiteProject.Controllers
 
                 _context.Add(message);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index)); // Redirect to the message index or another page
+                return RedirectToAction(nameof(Inbox)); // Redirect to the inbox after sending the message
             }
-
             return View(model); // Return the view with model state errors
         }
         
-        public async Task<IActionResult> PrivateMessages()
+        public async Task<IActionResult> Inbox()
         {
+            await SetNicknameAsync();
+
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
                 return NotFound();
             }
 
+            // Retrieve all messages where the current user is either the sender or the receiver
             var messages = await _context.Messages
                 .Where(m => m.SenderId == currentUser.Id || m.ReceiverId == currentUser.Id)
-                .Include(m => m.Sender)
-                .Include(m => m.Receiver)
-                .OrderByDescending(m => m.DateSent)
+                .Include(m => m.Sender)  // Include sender information (like nickname)
+                .Include(m => m.Receiver)  // Include receiver information (like nickname)
+                .OrderByDescending(m => m.DateSent)  // Optionally order by most recent
                 .ToListAsync();
 
             return View(messages);

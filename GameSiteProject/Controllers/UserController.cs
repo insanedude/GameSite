@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using GameSiteProject.Models;
-using GameSiteProject.ViewModels;
+using GameSiteProject.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -23,17 +23,26 @@ public class UserController : Controller
         // _context = context;
     }
     // GET
+    private async Task SetNicknameAsync()
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                ViewBag.Nickname = user.Nickname;
+            }
+        }
+    }
     public async Task<IActionResult> Index()
     {
+        await SetNicknameAsync();
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
             return NotFound();
         }
-
-        // Passing the nickname to the view (layout file in this case)
-        ViewData["Nickname"] = user.Nickname;
-
+        
         UserViewModel uvm = new UserViewModel()
         {
             Nickname = user.Nickname,
@@ -112,6 +121,7 @@ public class UserController : Controller
     // GET: User/Edit/5
     public async Task<IActionResult> Edit(string? id)
     {
+        await SetNicknameAsync();
         if (id == null)
         {
             return NotFound();
@@ -127,6 +137,8 @@ public class UserController : Controller
     
     public async Task<IActionResult> Details(string? id)
     {
+        await SetNicknameAsync();
+
         if (id == null)
         {
             return NotFound();
@@ -166,6 +178,8 @@ public class UserController : Controller
     
     public async Task<IActionResult> Delete(string? id)
     {
+        await SetNicknameAsync();
+
         if (id == null)
         {
             return NotFound();
@@ -183,6 +197,8 @@ public class UserController : Controller
     [Authorize]
     public async Task<IActionResult> Profile()
     {
+        await SetNicknameAsync();
+
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {
@@ -219,6 +235,8 @@ public class UserController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditUser(EditViewModel model)
     {
+        await SetNicknameAsync();
+
         if (!ModelState.IsValid)
         {
             return View(model);

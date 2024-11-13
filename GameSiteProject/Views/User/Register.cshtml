@@ -1,4 +1,4 @@
-@model GameSiteProject.ViewModels.RegistrationViewModel
+@model GameSiteProject.Models.ViewModels.RegistrationViewModel
 
 <h2>Register</h2>
 
@@ -35,3 +35,9 @@
 
     <button type="submit" class="btn btn-primary">Register</button>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

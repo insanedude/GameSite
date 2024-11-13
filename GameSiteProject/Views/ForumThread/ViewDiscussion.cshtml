@@ -1,0 +1,14 @@
+@model GameSiteProject.Models.ForumThread
+@{
+    Layout = "_Layout";
+}
+<h1>@Model.Title</h1>
+<p><strong>Posted by:</strong> @Model.User.Nickname on @Model.DateCreated.ToString("dd/MM/yyyy")</p>
+<p><strong>Game:</strong> @Model.Game.Title</p>
+<p>@Model.Description</p>
+
+<h3>Comments</h3>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>

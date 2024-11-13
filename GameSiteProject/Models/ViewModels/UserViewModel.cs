@@ -1,6 +1,6 @@
 using System;
 
-namespace GameSiteProject.ViewModels;
+namespace GameSiteProject.Models.ViewModels;
 
 public class UserViewModel
 {

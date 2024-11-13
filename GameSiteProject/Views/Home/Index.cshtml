@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,14 +10,16 @@
     <title>Потужний ігровий форум</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css"/>
-</head>
+</head> 
 <body>
-@foreach (var thread in Model)
+@foreach (var discussion in Model)
 {
     <div class="forum-thread">
-        <p>Game: @thread.Game.Title</p>
-        <p>Created by: @thread.User.Nickname</p>
-        <p>Posted on: @thread.DateCreated.ToString("MM/dd/yyyy")</p>
+        <a href="@Url.Action("ViewDiscussion", "ForumThread", new { id = discussion.ForumThreadId })">
+            <p>Game: @discussion.Game.Title</p>
+            <p>Created by: @discussion.User.Nickname</p>
+            <p>Posted on: @discussion.DateCreated.ToString("dd/MM/yyyy")</p>
+        </a>
     </div>
 }
 </body>

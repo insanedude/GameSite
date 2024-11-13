@@ -6,22 +6,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GameSiteProject.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GameSiteProject.Controllers
 {
     public class PostController : Controller
     {
         private readonly GameSiteDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public PostController(GameSiteDbContext context)
+        public PostController(GameSiteDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
-
+        
+        private async Task SetNicknameAsync()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    ViewBag.Nickname = user.Nickname;
+                }
+            }
+        }
         // GET: Post
         public async Task<IActionResult> Index()
         {
             var gameSiteDbContext = _context.Posts.Include(p => p.ForumThread).Include(p => p.User);
+            SetNicknameAsync().Wait();
             return View(await gameSiteDbContext.ToListAsync());
         }
 

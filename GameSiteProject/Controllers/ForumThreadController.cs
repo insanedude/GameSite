@@ -20,10 +20,23 @@ namespace GameSiteProject.Controllers
             _context = context;
             _userManager = userManager;
         }
+        
+        private async Task SetNicknameAsync()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    ViewBag.Nickname = user.Nickname;
+                }
+            }
+        }
 
         // GET: ForumThread
         public async Task<IActionResult> Index()
         {
+            await SetNicknameAsync();
             var gameSiteDbContext = _context.ForumThreads.Include(f => f.Game).Include(f => f.User);
             return View(await gameSiteDbContext.ToListAsync());
         }
@@ -31,6 +44,8 @@ namespace GameSiteProject.Controllers
         // GET: ForumThread/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            await SetNicknameAsync();
+
             if (id == null)
             {
                 return NotFound();
@@ -51,6 +66,7 @@ namespace GameSiteProject.Controllers
         // GET: ForumThread/Create
         public IActionResult Create()
         {
+            SetNicknameAsync().Wait();
             ViewData["GameId"] = new SelectList(_context.Games, "GameId", "GameId");
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Id");
             return View();
@@ -63,6 +79,8 @@ namespace GameSiteProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ForumThreadId,Title,GameId,Description,UserId,DateCreated,LastUpdated,ViewsCount")] ForumThread forumThread)
         {
+            await SetNicknameAsync();
+
             if (ModelState.IsValid)
             {
                 _context.Add(forumThread);
@@ -77,6 +95,8 @@ namespace GameSiteProject.Controllers
         // GET: ForumThread/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            await SetNicknameAsync();
+
             if (id == null)
             {
                 return NotFound();
@@ -99,6 +119,8 @@ namespace GameSiteProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ForumThreadId,Title,GameId,Description,UserId,DateCreated,LastUpdated,ViewsCount")] ForumThread forumThread)
         {
+            await SetNicknameAsync();
+
             if (id != forumThread.ForumThreadId)
             {
                 return NotFound();
@@ -132,6 +154,8 @@ namespace GameSiteProject.Controllers
         // GET: ForumThread/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            await SetNicknameAsync();
+
             if (id == null)
             {
                 return NotFound();
@@ -154,6 +178,8 @@ namespace GameSiteProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            await SetNicknameAsync();
+
             var forumThread = await _context.ForumThreads.FindAsync(id);
             if (forumThread != null)
             {
@@ -171,6 +197,7 @@ namespace GameSiteProject.Controllers
         
         public IActionResult CreateDiscussion()
         {
+            SetNicknameAsync().Wait();
             if (!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "User");
@@ -184,6 +211,7 @@ namespace GameSiteProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateDiscussion([Bind("ForumThreadId,Title,GameId,Description")] ForumThread forumThread)
         {
+            await SetNicknameAsync();
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
@@ -204,6 +232,28 @@ namespace GameSiteProject.Controllers
 
             ViewData["GameId"] = new SelectList(_context.Games, "GameId", "Title", forumThread.GameId);
             return View(forumThread);
+        }
+        
+        // GET: ForumThread/ViewThread/5
+        public async Task<IActionResult> ViewDiscussion(int? id)
+        {
+            await SetNicknameAsync();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var forumThread = await _context.ForumThreads
+                .Include(f => f.Game)
+                .Include(f => f.User)
+                .FirstOrDefaultAsync(m => m.ForumThreadId == id);
+
+            if (forumThread == null)
+            {
+                return NotFound();
+            }
+
+            return View("ViewDiscussion", forumThread); // Specify custom view
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using GameSiteProject.Models;
-using GameSiteProject.ViewModels;
+using GameSiteProject.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameSiteProject.Controllers
@@ -24,7 +24,7 @@ namespace GameSiteProject.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        private async Task SetNicknameAsync()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -34,6 +34,10 @@ namespace GameSiteProject.Controllers
                     ViewBag.Nickname = user.Nickname;
                 }
             }
+        }
+        public async Task<IActionResult> Index()
+        {
+            await SetNicknameAsync();
 
             var forumThreads = await _context.ForumThreads
                 .Include(f => f.Game)
