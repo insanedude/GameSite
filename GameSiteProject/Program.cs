@@ -18,14 +18,14 @@ namespace GameSiteProject
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<GameSiteDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("GameSiteConnectionString")));  // Ensure the correct name here
+                options.UseSqlServer(builder.Configuration.GetConnectionString("GameSiteConnectionString")));
 
-            builder.Services.AddDistributedMemoryCache(); // Required for storing session data in memory
+            builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30); // Set timeout duration
-                options.Cookie.HttpOnly = true; // Cookie settings for security
-                options.Cookie.IsEssential = true; // Make the session cookie essential
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
 
             builder.Services.AddControllersWithViews();
@@ -69,7 +69,6 @@ namespace GameSiteProject
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            //Seeding db
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;

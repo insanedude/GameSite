@@ -139,8 +139,9 @@ public class UserController : Controller
 
         return View(user);
     }
-    [HttpPost]
-    [ValidateAntiForgeryToken]
+    
+    // [HttpPost]
+    // [ValidateAntiForgeryToken]
     // public async Task<IActionResult> Edit(string id, EditViewModel evm)
     // {
     //     var user = await _userManager.FindByIdAsync(evm.Id);
@@ -186,7 +187,7 @@ public class UserController : Controller
             return NotFound();
         }
 
-        ViewData["HideHeader"] = true; // Set flag to hide header in this view
+        ViewData["HideHeader"] = true;
         return View(user);
     }
     
