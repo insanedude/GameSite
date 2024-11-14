@@ -9,41 +9,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Потужний ігровий форум</title>
+    <title>Powerful Gaming Forum</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css"/>
 </head>
 <body>
 <div class="container mt-4" style="max-height: 300px">
-    <h2 class="mb-4 text-center">Потужний ігровий форум</h2>
-    <div class="row">
-        @foreach (var discussion in Model)
-        {
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Game: @discussion.Game.Title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Created by: @discussion.User.Nickname</h6>
-                        <p class="card-text"><strong>Posted on:</strong> @discussion.DateCreated.ToString("dd/MM/yyyy")</p>
-                        <p class="card-text"><strong>Description:</strong>
-                            @{
-                                string descriptionText = discussion.Description.Length > 150 
-                                    ? discussion.Description.Substring(0, 150) + "..." 
-                                    : discussion.Description;
-                            }
-                            @descriptionText
-                        </p>
+    <h2 class="mb-4 text-center">Powerful Gaming Forum</h2>
 
-                        <a href="@Url.Action("ViewDiscussion", "ForumThread", new { id = discussion.ForumThreadId })" 
-                           class="btn btn-primary">Read More</a>
+    <form method="get" action="@Url.Action("Index", "Home")" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="nickname" value="@ViewBag.CurrentNicknameFilter" class="form-control w-50" placeholder="Filter by Nickname">
+            <button class="btn btn-primary btn-sm" type="submit">Filter</button>
+        </div>
+    </form>
+
+    <div class="mb-3">
+        <!-- Sort by Date Created -->
+        <a href="@Url.Action("Index", "Home", new { nickname = ViewBag.CurrentNicknameFilter, sortOrder = ViewBag.CurrentSortOrder == "asc" ? "desc" : "asc" })" 
+           class="btn btn-secondary btn-sm">
+            Sort by Date (@(ViewBag.CurrentSortOrder == "asc" ? "Descending" : "Ascending"))
+        </a>
+    </div>
+    
+    @if (!Model.Any()) 
+    {
+        <div class="alert alert-warning" role="alert">
+            Nothing was found.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var discussion in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Game: @discussion.Game.Title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Created by: @discussion.User.Nickname</h6>
+                            <p class="card-text"><strong>Posted on:</strong> @discussion.DateCreated.ToString("dd/MM/yyyy")</p>
+                            <p class="card-text"><strong>Description:</strong>
+                                @{
+                                    string descriptionText = discussion.Description.Length > 150 
+                                        ? discussion.Description.Substring(0, 150) + "..." 
+                                        : discussion.Description;
+                                }
+                                @descriptionText
+                            </p>
+
+                            <a href="@Url.Action("ViewDiscussion", "ForumThread", new { id = discussion.ForumThreadId })" 
+                               class="btn btn-primary">Read More</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    }
 </div>
 </body>
 </html>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>

@@ -35,16 +35,36 @@ namespace GameSiteProject.Controllers
                 }
             }
         }
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(string nickname = null, string sortOrder = "desc")
         {
             await SetNicknameAsync();
 
-            var forumThreads = await _context.ForumThreads
+            var query = _context.ForumThreads
                 .Include(f => f.Game)
                 .Include(f => f.User)
-                .OrderByDescending(f => f.DateCreated)
-                .ToListAsync();
+                .AsQueryable();
 
+            // Filter by nickname if provided
+            if (!string.IsNullOrEmpty(nickname))
+            {
+                query = query.Where(f => f.User.Nickname == nickname);
+            }
+
+            // Sorting logic
+            if (sortOrder == "asc")
+            {
+                query = query.OrderBy(f => f.DateCreated);
+            }
+            else
+            {
+                query = query.OrderByDescending(f => f.DateCreated);
+            }
+
+            var forumThreads = await query.ToListAsync();
+
+            ViewBag.CurrentNicknameFilter = nickname;
+            ViewBag.CurrentSortOrder = sortOrder;
             return View(forumThreads);
         }
 
