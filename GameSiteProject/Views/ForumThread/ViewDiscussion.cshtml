@@ -2,10 +2,12 @@
 @{
     Layout = "_Layout";
 }
+
 <h1>@Model.Title</h1>
 <p><strong>Posted by:</strong> @Model.User.Nickname on @Model.DateCreated.ToString("dd/MM/yyyy")</p>
 <p><strong>Game:</strong> @Model.Game.Title</p>
-<p>@Model.Description</p>
+
+<p>@Html.Raw(Model.Description.Replace("\n", "<br/>"))</p>
 
 <h3>Comments</h3>
 

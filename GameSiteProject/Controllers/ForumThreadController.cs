@@ -34,6 +34,7 @@ namespace GameSiteProject.Controllers
         }
 
         // GET: ForumThread
+        // GET: ForumThread
         public async Task<IActionResult> Index()
         {
             await SetNicknameAsync();
@@ -253,7 +254,7 @@ namespace GameSiteProject.Controllers
                 return NotFound();
             }
 
-            return View("ViewDiscussion", forumThread); // Specify custom view
+            return View("ViewDiscussion", forumThread);
         }
     }
 }
