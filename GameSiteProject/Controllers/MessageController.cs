@@ -38,21 +38,23 @@ namespace GameSiteProject.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(User);
             await SetNicknameAsync();
-            // if (currentUser == null)
-            // {
-            //     return NotFound();
-            // }
+    
+            // Ensure current user is valid
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
 
             var messages = await _context.Messages
-                .Where(m => m.SenderId == currentUser.Id || m.ReceiverId == currentUser.Id)
+                .Where(m => (m.SenderId == currentUser.Id || m.ReceiverId == currentUser.Id) && m.Receiver != null)
                 .Include(m => m.Receiver)
                 .Include(m => m.Sender)
-                .OrderByDescending(m => m.DateSent) // Optional: show most recent messages first
+                .OrderByDescending(m => m.DateSent)
                 .ToListAsync();
 
             return View(messages);
         }
-
+        
         // GET: Message/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -261,9 +263,9 @@ namespace GameSiteProject.Controllers
                 return NotFound();
             }
 
-            // Retrieve all messages where the current user is either the sender or the receiver
+            // Retrieve all messages where the current user is either the sender or the receiver, excluding messages with no receiver
             var messages = await _context.Messages
-                .Where(m => m.SenderId == currentUser.Id || m.ReceiverId == currentUser.Id)
+                .Where(m => (m.SenderId == currentUser.Id || m.ReceiverId == currentUser.Id) && m.Receiver != null)
                 .Include(m => m.Sender)  // Include sender information (like nickname)
                 .Include(m => m.Receiver)  // Include receiver information (like nickname)
                 .OrderByDescending(m => m.DateSent)  // Optionally order by most recent

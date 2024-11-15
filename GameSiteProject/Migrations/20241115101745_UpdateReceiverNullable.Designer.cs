@@ -4,6 +4,7 @@ using GameSiteProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameSiteProject.Migrations
 {
     [DbContext(typeof(GameSiteDbContext))]
-    partial class GameSiteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241115101745_UpdateReceiverNullable")]
+    partial class UpdateReceiverNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,9 +111,6 @@ namespace GameSiteProject.Migrations
                     b.Property<DateTime>("DateSent")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ForumThreadId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
@@ -121,8 +121,6 @@ namespace GameSiteProject.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MessageId");
-
-                    b.HasIndex("ForumThreadId");
 
                     b.HasIndex("ReceiverId");
 
@@ -476,10 +474,6 @@ namespace GameSiteProject.Migrations
 
             modelBuilder.Entity("GameSiteProject.Models.Message", b =>
                 {
-                    b.HasOne("GameSiteProject.Models.ForumThread", "ForumThread")
-                        .WithMany()
-                        .HasForeignKey("ForumThreadId");
-
                     b.HasOne("GameSiteProject.Models.User", "Receiver")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("ReceiverId")
@@ -489,8 +483,6 @@ namespace GameSiteProject.Migrations
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.ClientCascade);
-
-                    b.Navigation("ForumThread");
 
                     b.Navigation("Receiver");
 

@@ -254,7 +254,59 @@ namespace GameSiteProject.Controllers
                 return NotFound();
             }
 
+            var comments = await _context.Messages
+                .Where(m => m.ForumThreadId == forumThread.ForumThreadId) // Make sure this is filtering by ForumThreadId
+                .Include(m => m.Sender) // Make sure to include the sender
+                .OrderByDescending(m => m.DateSent) // Order by latest comment
+                .ToListAsync();
+
+            ViewBag.Comments = comments;
+
             return View("ViewDiscussion", forumThread);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddComment(int forumThreadId, string content)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            // Create the new comment
+            var message = new Message
+            {
+                SenderId = user.Id,
+                ReceiverId = null, // Set to the forum thread or user to link it
+                Content = content,
+                DateSent = DateTime.Now,
+                IsRead = false,
+                ForumThreadId = forumThreadId // Ensure the comment is linked to the correct thread
+            };
+
+            // Save the new comment in the database
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+
+            // Retrieve the updated list of comments, with the newly added comment at the top
+            var comments = await _context.Messages
+                .Where(m => m.ForumThreadId == forumThreadId)
+                .Include(m => m.Sender) // Make sure to include the sender
+                .OrderByDescending(m => m.DateSent) // Sort by latest comment first
+                .ToListAsync();
+
+            // Get the forum thread details
+            var forumThread = await _context.ForumThreads
+                .Include(f => f.Game)
+                .Include(f => f.User)
+                .FirstOrDefaultAsync(m => m.ForumThreadId == forumThreadId);
+
+            // Pass the comments and the forum thread to the view
+            ViewBag.Comments = comments;
+
+            return RedirectToAction("ViewDiscussion", new { id = forumThreadId });        
         }
     }
 }

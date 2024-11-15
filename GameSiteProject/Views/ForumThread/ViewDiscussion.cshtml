@@ -3,14 +3,62 @@
     Layout = "_Layout";
 }
 
-<h1>@Model.Title</h1>
-<p><strong>Posted by:</strong> @Model.User.Nickname on @Model.DateCreated.ToString("dd/MM/yyyy")</p>
-<p><strong>Game:</strong> @Model.Game.Title</p>
+<div class="container-fluid mt-4">
+    <h1 class="mb-4 text-center">@Model.Title</h1>
+    <p><strong>Posted by:</strong> @Model.User.Nickname on @Model.DateCreated.ToString("dd/MM/yyyy")</p>
+    <p><strong>Game:</strong> @Model.Game.Title</p>
 
-<p>@Html.Raw(Model.Description.Replace("\n", "<br/>"))</p>
+    <div class="content mt-3">
+        <p>@Html.Raw(Model.Description.Replace("\n", "<br/>"))</p>
+    </div>
 
-<h3>Comments</h3>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h3 class="mt-4">Leave a Comment</h3>
+        <form method="post" asp-action="AddComment" asp-controller="ForumThread">
+            <input type="hidden" name="forumThreadId" value="@Model.ForumThreadId" />
+            <div class="form-group">
+                <textarea name="content" class="form-control" rows="3" placeholder="Write your comment here..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+        </form>
+    }
+    else
+    {
+        <p class="mt-4"><a href="@Url.Action("Login", "User")">Log in</a> to leave a comment.</p>
+    }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+    <h3 class="mt-4">Comments</h3>
+    <div id="comments-section">
+        @if (ViewBag.Comments != null && ViewBag.Comments.Count > 0)
+        {
+            foreach (var comment in ViewBag.Comments)
+            {
+                <div class="comment mb-3">
+                    <p><strong>@comment.Sender.Nickname:</strong> @comment.Content</p>
+                    <p class="text-muted"><small>@comment.DateSent.ToString("dd/MM/yyyy HH:mm")</small></p>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No comments yet. Be the first to comment!</p>
+        }
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 85%;
+        padding: 15px;
+        word-wrap: break-word;
+    }
+    .content {
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+    }
+    .comment {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+</style>

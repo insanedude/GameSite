@@ -213,6 +213,8 @@ public class UserController : Controller
     [Route("User/EditUser")]
     public async Task<IActionResult> EditUser()
     {
+        await SetNicknameAsync();
+
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
         {

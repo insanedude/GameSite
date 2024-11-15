@@ -18,6 +18,14 @@
         },
         "runtime": {
           "GameSiteProject.dll": {}
+        },
+        "resources": {
+          "en-US/GameSiteProject.resources.dll": {
+            "locale": "en-US"
+          },
+          "uk-UA/GameSiteProject.resources.dll": {
+            "locale": "uk-UA"
+          }
         }
       },
       "Azure.Core/1.35.0": {
