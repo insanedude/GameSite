@@ -21,7 +21,7 @@
 </header>
 
 <div class="container">
-    <h2>@Model.Nickname's Profile</h2>
+    <h2>@ViewData["ProfileOf"] @Model.Nickname</h2>
 
     <div class="row">
         <div class="col-md-4">
@@ -31,11 +31,11 @@
              alt="Profile Picture" width="100" height="100" class="img-fluid rounded-circle" />
         </div>
         <div class="col-md-8">
-            <h3>Information</h3>
-            <p><strong>Email:</strong> @Model.Email</p>
-            <p><strong>Information About User:</strong></p>
+            <h3>@ViewData["Information"]</h3>
+            <p><strong>@ViewData["Email"]:</strong> @Model.Email</p>
+            <p><strong>@ViewData["InfoAboutUser"]:</strong></p>
             <p>@Model.UserInformation</p>
-            <a asp-controller="User" asp-action="EditUser" class="btn btn-warning">Edit Profile</a>       
+            <a asp-controller="User" asp-action="EditUser" class="btn btn-warning">@ViewData["EditProfile"]</a>       
         </div>
     </div>
 </div>

@@ -4,37 +4,37 @@
     ViewData["Title"] = "Edit Profile";
 }
 
-<h2>Edit Profile</h2>
+<h2>@ViewData["EditProfile"]</h2>
 
 <form asp-action="EditUser" method="post">
     <div class="form-group">
-        <label asp-for="Nickname"></label>
+        <label asp-for="Nickname">@ViewData["NicknameToChange"]</label>
         <input asp-for="Nickname" class="form-control" />
         <span asp-validation-for="Nickname" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Email"></label>
+        <label asp-for="Email">@ViewData["Email"]</label>
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Password"></label>
+        <label asp-for="Password">@ViewData["Password"]</label>
         <input asp-for="Password" class="form-control" type="password" />
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="ProfilePicturePath">PFP Path</label>
+        <label asp-for="ProfilePicturePath">@ViewData["PFPPath"]</label>
         <input asp-for="ProfilePicturePath" class="form-control" />
         <span asp-validation-for="ProfilePicturePath" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="UserInformation">Information</label>
+        <label asp-for="UserInformation">@ViewData["InfoAboutUser"]</label>
         <input asp-for="UserInformation" class="form-control" />
         <span asp-validation-for="UserInformation" class="text-danger"></span>
     </div>    
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="submit" class="btn btn-primary">@ViewData["SaveChanges"]</button>
 </form>

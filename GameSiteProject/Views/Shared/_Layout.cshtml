@@ -1,4 +1,8 @@
-﻿@{
+﻿@using System.Threading
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
     ViewData["Title"] = "GameLens";
 }
 
@@ -24,10 +28,10 @@
                         @ViewBag.Nickname
                     </a>
                     <a href="@Url.Action("SendPrivateMessage", "Message")" class="btn btn-primary ml-3">
-                        Send Private Message
+                        @ViewData["SendDM"]
                     </a>
                     <a href="@Url.Action("Inbox", "Message")" class="btn btn-primary ml-3">
-                        View Private Messages
+                        @ViewData["ViewDMS"]
                     </a>
                 }
             </div>
@@ -39,21 +43,31 @@
 
             <div class="navbar-collapse collapse" id="navbarNav">
                 <div class="ml-auto">
-                    <a href="@Url.Action("CreateDiscussion", "ForumThread")" class="btn btn-primary">Create Discussion</a>
+                    <a href="@Url.Action("CreateDiscussion", "ForumThread")" class="btn btn-primary">@ViewData["CreateDiscussion"]</a>
 
                     @if (User.Identity.IsAuthenticated)
                     {
                         <form action="@Url.Action("Logout", "User")" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-danger">Logout</button>
+                            <button type="submit" class="btn btn-danger">@ViewData["Logout"]</button>
                         </form>
                     }
                     else
                     {
-                        <a href="@Url.Action("Login", "User")" class="btn btn-primary">Login</a>
-                        <a href="@Url.Action("Register", "User")" class="btn btn-secondary">Register</a>
+                        <a href="@Url.Action("Login", "User")" class="btn btn-primary">@ViewData["Login"]</a>
+                        <a href="@Url.Action("Register", "User")" class="btn btn-secondary">@ViewData["Register"]</a>
                     }
                 </div>
 
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName.ToUpper() <!-- Current language -->
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <a class="dropdown-item" href="@Url.Action("SetLanguage", "Home", new { culture = "en", returnUrl = ViewContext.HttpContext.Request.Path })">EN</a>
+                        <a class="dropdown-item" href="@Url.Action("SetLanguage", "Home", new { culture = "uk", returnUrl = ViewContext.HttpContext.Request.Path })">UA</a>
+                    </div>
+                </div>
+                
                 @if (User.IsInRole("Admin"))
                 {
                     <div class="btn-group dropdown">

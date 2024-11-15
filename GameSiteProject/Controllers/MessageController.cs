@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,31 +7,25 @@ using Microsoft.EntityFrameworkCore;
 using GameSiteProject.Models;
 using GameSiteProject.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 
 namespace GameSiteProject.Controllers
 {
-    public class MessageController : Controller
+    public class MessageController : BaseController
     {
         private readonly GameSiteDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IStringLocalizer<HomeController> _localizer;
 
-        public MessageController(GameSiteDbContext context, UserManager<User> userManager)
+
+        public MessageController(GameSiteDbContext context, UserManager<User> userManager, 
+            IStringLocalizer<HomeController> localizer) : base(localizer, userManager)
         {
             _context = context;
             _userManager = userManager;
+            _localizer = localizer;
         }
-
-        private async Task SetNicknameAsync()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = await _userManager.GetUserAsync(User);
-                if (user != null)
-                {
-                    ViewBag.Nickname = user.Nickname;
-                }
-            }
-        }
+        
         // GET: Message
         public async Task<IActionResult> Index()
         {
@@ -226,8 +219,7 @@ namespace GameSiteProject.Controllers
                 {
                     return NotFound();
                 }
-
-                // Find receiver by Nickname instead of Email
+                
                 var receiver = await _userManager.Users
                     .FirstOrDefaultAsync(u => u.Nickname == model.ReceiverNickname); 
 

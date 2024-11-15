@@ -20,11 +20,11 @@
           "GameSiteProject.dll": {}
         },
         "resources": {
-          "en-US/GameSiteProject.resources.dll": {
-            "locale": "en-US"
+          "en/GameSiteProject.resources.dll": {
+            "locale": "en"
           },
-          "uk-UA/GameSiteProject.resources.dll": {
-            "locale": "uk-UA"
+          "uk/GameSiteProject.resources.dll": {
+            "locale": "uk"
           }
         }
       },

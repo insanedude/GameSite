@@ -1,0 +1,149 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="SiteHeader" xml:space="preserve">
+        <value>siteheader</value>
+    </data>
+    <data name="SendDM" xml:space="preserve">
+        <value>senddm</value>
+    </data>
+    <data name="ViewDMs" xml:space="preserve">
+        <value>viewdms</value>
+    </data>
+    <data name="CreateDiscussion" xml:space="preserve">
+        <value>creatediscussion</value>
+    </data>
+    <data name="Logout" xml:space="preserve">
+        <value>logout</value>
+    </data>
+    <data name="Login" xml:space="preserve">
+        <value>login</value>
+    </data>
+    <data name="Register" xml:space="preserve">
+        <value>register</value>
+    </data>
+    <data name="Filter" xml:space="preserve">
+        <value>filter</value>
+    </data>
+    <data name="GameName" xml:space="preserve">
+        <value>gamename</value>
+    </data>
+    <data name="CreatedBy" xml:space="preserve">
+        <value>createdby</value>
+    </data>
+    <data name="PostedOn" xml:space="preserve">
+        <value>postedon</value>
+    </data>
+    <data name="DiscussionDescr" xml:space="preserve">
+        <value>discussiondescr</value>
+    </data>
+    <data name="SortByDate" xml:space="preserve">
+        <value>sortbydate</value>
+    </data>
+    <data name="Descending" xml:space="preserve">
+        <value>descending</value>
+    </data>
+    <data name="Ascending" xml:space="preserve">
+        <value>ascending</value>
+    </data>
+    <data name="NothingWasFound" xml:space="preserve">
+        <value>nothingwasfound</value>
+    </data>
+    <data name="ReadMore" xml:space="preserve">
+        <value>readmore</value>
+    </data>
+    <data name="FilterByNickname" xml:space="preserve">
+        <value>filterbynickname</value>
+    </data>
+    <data name="ProfileOf" xml:space="preserve">
+        <value>profileof</value>
+    </data>
+    <data name="Information" xml:space="preserve">
+        <value>information</value>
+    </data>
+    <data name="Email" xml:space="preserve">
+        <value>email</value>
+    </data>
+    <data name="InfoAboutUser" xml:space="preserve">
+        <value>infoaboutuser</value>
+    </data>
+    <data name="EditProfile" xml:space="preserve">
+        <value>editprofile</value>
+    </data>
+    <data name="NicknameToChange" xml:space="preserve">
+        <value>nickname</value>
+    </data>
+    <data name="Password" xml:space="preserve">
+        <value>password</value>
+    </data>
+    <data name="PFPPath" xml:space="preserve">
+        <value>pfppath</value>
+    </data>
+    <data name="SaveChanges" xml:space="preserve">
+        <value>savechanges</value>
+    </data>
+    <data name="RegisterApply" xml:space="preserve">
+        <value>registerapply</value>
+    </data>
+    <data name="Inbox" xml:space="preserve">
+        <value>inbox</value>
+    </data>
+    <data name="SendPrivateMessage" xml:space="preserve">
+        <value>sendprivatemessage</value>
+    </data>
+    <data name="ReceiverNickname" xml:space="preserve">
+        <value>receivernickname</value>
+    </data>
+    <data name="Content" xml:space="preserve">
+        <value>content</value>
+    </data>
+    <data name="SendMessage" xml:space="preserve">
+        <value>sendmessage</value>
+    </data>
+    <data name="SelectGame" xml:space="preserve">
+        <value>selectgame</value>
+    </data>
+    <data name="TitleOfDiscussion" xml:space="preserve">
+        <value>titleofdiscussion</value>
+    </data>
+    <data name="SubmitCreation" xml:space="preserve">
+        <value>submitcreation</value>
+    </data>
+    <data name="At" xml:space="preserve">
+        <value>at</value>
+    </data>
+    <data name="LeaveAComment" xml:space="preserve">
+        <value>leaveacomment</value>
+    </data>
+    <data name="WriteYourCommentHere" xml:space="preserve">
+        <value>writeyourcommenthere</value>
+    </data>
+    <data name="PostComment" xml:space="preserve">
+        <value>postcomment</value>
+    </data>
+    <data name="LogInTo" xml:space="preserve">
+        <value>loginto</value>
+    </data>
+    <data name="ToLeaveAComment" xml:space="preserve">
+        <value>toleaveacomment</value>
+    </data>
+    <data name="Comments" xml:space="preserve">
+        <value>comments</value>
+    </data>
+    <data name="NoCommentsYet" xml:space="preserve">
+        <value>nocommentsyet</value>
+    </data>
+    <data name="PostedBy" xml:space="preserve">
+        <value>postedby</value>
+    </data>
+</root>

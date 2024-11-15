@@ -7,33 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GameSiteProject.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 
 namespace GameSiteProject.Controllers
 {
-    public class ForumThreadController : Controller
+    public class ForumThreadController : BaseController
     {
         private readonly GameSiteDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IStringLocalizer<HomeController> _localizer;
 
-        public ForumThreadController(GameSiteDbContext context, UserManager<User> userManager)
+        public ForumThreadController(GameSiteDbContext context, UserManager<User> userManager,
+            IStringLocalizer<HomeController> localizer) : base(localizer, userManager)
         {
             _context = context;
             _userManager = userManager;
+            _localizer = localizer;
         }
         
-        private async Task SetNicknameAsync()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = await _userManager.GetUserAsync(User);
-                if (user != null)
-                {
-                    ViewBag.Nickname = user.Nickname;
-                }
-            }
-        }
-
-        // GET: ForumThread
         // GET: ForumThread
         public async Task<IActionResult> Index()
         {

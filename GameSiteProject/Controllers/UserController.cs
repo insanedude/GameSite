@@ -7,33 +7,27 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace GameSiteProject.Controllers;
 
-public class UserController : Controller
+public class UserController : BaseController
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
-    // private readonly IdentityDbContext<User> _context;
-    public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
+    private readonly GameSiteDbContext _context;
+    private readonly IStringLocalizer<HomeController> _localizer;
+
+    public UserController(GameSiteDbContext context, UserManager<User> userManager,
+        IStringLocalizer<HomeController> localizer, SignInManager<User> signInManager) : base(localizer, userManager)
     {
-        // , IdentityDbContext<User> context
+        _context = context;
         _userManager = userManager;
+        _localizer = localizer;
         _signInManager = signInManager;
-        // _context = context;
     }
+    
     // GET
-    private async Task SetNicknameAsync()
-    {
-        if (User.Identity.IsAuthenticated)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user != null)
-            {
-                ViewBag.Nickname = user.Nickname;
-            }
-        }
-    }
     public async Task<IActionResult> Index()
     {
         await SetNicknameAsync();
@@ -58,12 +52,14 @@ public class UserController : Controller
     [HttpGet]
     public IActionResult Register()
     {
+        SetNicknameAsync().Wait();
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> Register(RegistrationViewModel model, string? returnUrl = null)
     {
+        await SetNicknameAsync();
         if (ModelState.IsValid)
         {
             User user = new() { Email = model.Email, UserName = model.Email, Nickname = model.Nickname, 
@@ -85,12 +81,14 @@ public class UserController : Controller
     [HttpGet]
     public IActionResult Login()
     {
+        SetNicknameAsync().Wait();
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
     {
+        await SetNicknameAsync();
         if (ModelState.IsValid)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);

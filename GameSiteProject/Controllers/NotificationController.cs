@@ -7,30 +7,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GameSiteProject.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 
 namespace GameSiteProject.Controllers
 {
-    public class NotificationController : Controller
+    public class NotificationController : BaseController
     {
         private readonly GameSiteDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IStringLocalizer<HomeController> _localizer;
 
-        public NotificationController(GameSiteDbContext context, UserManager<User> userManager)
+        public NotificationController(GameSiteDbContext context, UserManager<User> userManager,
+            IStringLocalizer<HomeController> localizer) : base(localizer, userManager)
         {
             _context = context;
             _userManager = userManager;
-        }
-        
-        private async Task SetNicknameAsync()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = await _userManager.GetUserAsync(User);
-                if (user != null)
-                {
-                    ViewBag.Nickname = user.Nickname;
-                }
-            }
+            _localizer = localizer;
         }
 
         // GET: Notification

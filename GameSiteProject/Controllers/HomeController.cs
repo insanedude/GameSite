@@ -7,33 +7,27 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using GameSiteProject.Models;
 using GameSiteProject.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace GameSiteProject.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<User> _userManager;
         private readonly GameSiteDbContext _context;
+        private readonly IStringLocalizer<HomeController> _localizer;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, GameSiteDbContext context)
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, 
+            GameSiteDbContext context, IStringLocalizer<HomeController> localizer) : base(localizer, userManager)
         {
             _logger = logger;
             _userManager = userManager;
             _context = context;
-        }
-
-        private async Task SetNicknameAsync()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = await _userManager.GetUserAsync(User);
-                if (user != null)
-                {
-                    ViewBag.Nickname = user.Nickname;
-                }
-            }
+            _localizer = localizer;
         }
 
         public async Task<IActionResult> Index(string nickname = null, string sortOrder = "desc")
@@ -65,6 +59,7 @@ namespace GameSiteProject.Controllers
 
             ViewBag.CurrentNicknameFilter = nickname;
             ViewBag.CurrentSortOrder = sortOrder;
+
             return View(forumThreads);
         }
 
@@ -72,6 +67,22 @@ namespace GameSiteProject.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                returnUrl = Url.Action("Index", "Home"); // Fallback to home page if returnUrl is empty
+            }
+
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+
+            return LocalRedirect(returnUrl);
         }
     }
 }

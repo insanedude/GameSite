@@ -5,8 +5,8 @@
 
 <div class="container-fluid mt-4">
     <h1 class="mb-4 text-center">@Model.Title</h1>
-    <p><strong>Posted by:</strong> @Model.User.Nickname on @Model.DateCreated.ToString("dd/MM/yyyy")</p>
-    <p><strong>Game:</strong> @Model.Game.Title</p>
+    <p><strong>@ViewData["PostedBy"]:</strong> @Model.User.Nickname @ViewData["At"] @Model.DateCreated.ToString("dd/MM/yyyy")</p>
+    <p><strong>@ViewData["GameName"]:</strong> @Model.Game.Title</p>
 
     <div class="content mt-3">
         <p>@Html.Raw(Model.Description.Replace("\n", "<br/>"))</p>
@@ -14,21 +14,22 @@
 
     @if (User.Identity.IsAuthenticated)
     {
-        <h3 class="mt-4">Leave a Comment</h3>
+        <h3 class="mt-4">@ViewData["LeaveAComment"]</h3>
         <form method="post" asp-action="AddComment" asp-controller="ForumThread">
             <input type="hidden" name="forumThreadId" value="@Model.ForumThreadId" />
             <div class="form-group">
-                <textarea name="content" class="form-control" rows="3" placeholder="Write your comment here..." required></textarea>
+                <textarea name="content" class="form-control" rows="3" placeholder=@ViewData["WriteYourCommentHere"] required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+            <button type="submit" class="btn btn-primary mt-2">@ViewData["PostComment"]</button>
         </form>
     }
     else
     {
-        <p class="mt-4"><a href="@Url.Action("Login", "User")">Log in</a> to leave a comment.</p>
+        <p class="mt-4"><a href="@Url.Action("Login", "User")">@ViewData["LogInTo"]</a> @ViewData["ToLeaveAComment"].</p>
     }
 
-    <h3 class="mt-4">Comments</h3>
+    @* <h3 class="mt-4">@ViewData["Comments"]</h3> *@
+    <h3 class="mt-4"></h3>
     <div id="comments-section">
         @if (ViewBag.Comments != null && ViewBag.Comments.Count > 0)
         {
@@ -42,7 +43,8 @@
         }
         else
         {
-            <p>No comments yet. Be the first to comment!</p>
+            <p>@ViewData["NoCommentsYet"]</p>
+            // No comments yet. Be the first to comment!
         }
     </div>
 </div>
