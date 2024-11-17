@@ -51,7 +51,7 @@
                             <h5 class="card-title">@ViewData["GameName"]: @discussion.Game.Title</h5>
                             <h6 class="card-subtitle mb-2 text-muted">@ViewData["CreatedBy"]: @discussion.User.Nickname</h6>
                             <p class="card-text"><strong>@ViewData["PostedOn"]:</strong> @discussion.DateCreated.ToString("dd/MM/yyyy")</p>
-                            <p class="card-text"><strong>@ViewData["DiscussionDescr"]:</strong>
+                            <p class="card-text"><strong>@ViewData["DiscussionDescr"]:</strong> 
                                 @{
                                     string descriptionText = discussion.Description.Length > 150 
                                         ? discussion.Description.Substring(0, 150) + "..." 
@@ -59,7 +59,6 @@
                                 }
                                 @descriptionText
                             </p>
-
                             <a href="@Url.Action("ViewDiscussion", "ForumThread", new { id = discussion.ForumThreadId })" 
                                class="btn btn-primary">@ViewData["ReadMore"]</a>
                         </div>
@@ -67,6 +66,30 @@
                 </div>
             }
         </div>
+        <style>
+        .card {
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+        .card-title, .card-subtitle, .card-text {
+            margin-bottom: 1rem;
+        }
+        .card-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    </style>
     }
 </div>
 </body>
