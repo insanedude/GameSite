@@ -21,19 +21,17 @@ namespace GameSiteProject.Models
             base.OnModelCreating(modelBuilder);
 
 
-            // Configure the one-to-many relationship between Message and User (SentMessages)
             modelBuilder.Entity<Message>()
-                .HasOne(m => m.Sender) // Message has one Sender (User)
-                .WithMany(u => u.SentMessages) // User has many SentMessages
-                .HasForeignKey(m => m.SenderId) // Foreign key for Sender
-                .OnDelete(DeleteBehavior.ClientCascade); // Optional: configure delete behavior
+                .HasOne(m => m.Sender)
+                .WithMany(u => u.SentMessages)
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
-            // Configure the one-to-many relationship between Message and User (ReceivedMessages)
             modelBuilder.Entity<Message>()
-                .HasOne(m => m.Receiver) // Message has one Receiver (User)
-                .WithMany(u => u.ReceivedMessages) // User has many ReceivedMessages
-                .HasForeignKey(m => m.ReceiverId) // Foreign key for Receiver
-                .OnDelete(DeleteBehavior.ClientCascade); // Optional: configure delete behavior
+                .HasOne(m => m.Receiver)
+                .WithMany(u => u.ReceivedMessages)
+                .HasForeignKey(m => m.ReceiverId)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

@@ -1,11 +1,9 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GameSiteProject.Models;
 using GameSiteProject.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -28,11 +26,9 @@ public class UserController : BaseController
         _signInManager = signInManager;
     }
     
-    // GET
     public async Task<IActionResult> Index()
     {
         SetNicknameAsync().Wait();
-        // Fetch all users from the database (you can adjust this based on your actual service or repository)
         var users = await _userManager.Users.Select(u => new UserViewModel
         {
             Id = u.Id,
@@ -44,56 +40,8 @@ public class UserController : BaseController
             DateJoined = u.DateJoined
         }).ToListAsync();
 
-        return View(users); // Pass the list to the view
+        return View(users);
     }
-    
-    // public IActionResult Create()
-    // {
-    //     SetNicknameAsync().Wait();
-    //     return View();
-    // }
-    //
-    // // POST: User/Create
-    // [HttpPost]
-    // [ValidateAntiForgeryToken]
-    // public async Task<IActionResult> Create(RegistrationViewModel model)
-    // {
-    //     await SetNicknameAsync();
-    //
-    //     if (ModelState.IsValid)
-    //     {
-    //         // Create a new user with the provided model data
-    //         var user = new User
-    //         {
-    //             UserName = model.Email, // Use email as the username
-    //             Email = model.Email,
-    //             Nickname = model.Nickname,
-    //             ProfilePicturePath = model.ProfilePicturePath,
-    //             UserInformation = model.UserInformation,
-    //             TotalScore = 0, // Initialize default score
-    //             DateJoined = DateTime.Now // Set the DateJoined to the current date
-    //         };
-    //
-    //         // Create the user in the database
-    //         var result = await _userManager.CreateAsync(user, model.Password);
-    //
-    //         if (result.Succeeded)
-    //         {
-    //             // Automatically sign the user in after registration
-    //             await _signInManager.SignInAsync(user, isPersistent: false);
-    //
-    //             // Redirect to the profile or home page after successful registration
-    //             return RedirectToAction("Profile", "User");
-    //         }
-    //
-    //         // Add any errors if the user creation fails
-    //         AddErrors(result);
-    //     }
-    //
-    //     // Return to the view with the model to show validation errors
-    //     return View(model);
-    // }
-
     
     [HttpGet]
     public IActionResult Register()
@@ -162,7 +110,6 @@ public class UserController : BaseController
         return RedirectToAction("Index", "Home");
     }
 
-    // GET: User/Edit/5
     [HttpGet]
     public async Task<IActionResult> Edit(string? id)
     {
@@ -190,7 +137,6 @@ public class UserController : BaseController
         return View(model);
     }
 
-    // POST: User/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(string id, EditViewModel evm)
@@ -229,7 +175,7 @@ public class UserController : BaseController
         }
 
         var user = await _userManager.Users
-            .Include(u => u.ForumThreads)  // Optionally include related data
+            .Include(u => u.ForumThreads)
             .FirstOrDefaultAsync(m => m.Id == id);
         if (user == null)
         {

@@ -39,13 +39,11 @@ namespace GameSiteProject.Controllers
                 .Include(f => f.User)
                 .AsQueryable();
 
-            // Filter by nickname if provided
             if (!string.IsNullOrEmpty(nickname))
             {
                 query = query.Where(f => f.User.Nickname == nickname);
             }
 
-            // Sorting logic
             if (sortOrder == "asc")
             {
                 query = query.OrderBy(f => f.DateCreated);
@@ -73,7 +71,7 @@ namespace GameSiteProject.Controllers
         {
             if (string.IsNullOrWhiteSpace(returnUrl))
             {
-                returnUrl = Url.Action("Index", "Home"); // Fallback to home page if returnUrl is empty
+                returnUrl = Url.Action("Index", "Home");
             }
 
             Response.Cookies.Append(

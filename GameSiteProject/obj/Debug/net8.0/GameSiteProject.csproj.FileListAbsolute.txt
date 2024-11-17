@@ -299,3 +299,10 @@ C:\Users\insan\RiderProjects\GameSite\GameSiteProject\obj\Debug\net8.0\en\GameSi
 C:\Users\insan\RiderProjects\GameSite\GameSiteProject\obj\Debug\net8.0\en\GameSiteProject.resources.dll
 C:\Users\insan\RiderProjects\GameSite\GameSiteProject\obj\Debug\net8.0\uk\GameSiteProject.resources.cs
 C:\Users\insan\RiderProjects\GameSite\GameSiteProject\obj\Debug\net8.0\uk\GameSiteProject.resources.dll
+C:\Users\insan\RiderProjects\GameSite\GameSiteProject\bin\Debug\net8.0\Castle.Core.dll
+C:\Users\insan\RiderProjects\GameSite\GameSiteProject\bin\Debug\net8.0\Moq.dll
+C:\Users\insan\RiderProjects\GameSite\GameSiteProject\bin\Debug\net8.0\Moq.EntityFrameworkCore.dll
+C:\Users\insan\RiderProjects\GameSite\GameSiteProject\bin\Debug\net8.0\xunit.abstractions.dll
+C:\Users\insan\RiderProjects\GameSite\GameSiteProject\bin\Debug\net8.0\xunit.assert.dll
+C:\Users\insan\RiderProjects\GameSite\GameSiteProject\bin\Debug\net8.0\xunit.core.dll
+C:\Users\insan\RiderProjects\GameSite\GameSiteProject\bin\Debug\net8.0\xunit.execution.dotnet.dll

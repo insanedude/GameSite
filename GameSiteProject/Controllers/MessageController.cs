@@ -26,13 +26,11 @@ namespace GameSiteProject.Controllers
             _localizer = localizer;
         }
         
-        // GET: Message
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
             await SetNicknameAsync();
     
-            // Ensure current user is valid
             if (currentUser == null)
             {
                 return NotFound();
@@ -48,7 +46,6 @@ namespace GameSiteProject.Controllers
             return View(messages);
         }
         
-        // GET: Message/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             await SetNicknameAsync();
@@ -69,17 +66,13 @@ namespace GameSiteProject.Controllers
             return View(message);
         }
 
-        // GET: Message/Create
         public IActionResult Create()
         {
             ViewData["ReceiverId"] = new SelectList(_context.User, "Id", "Id");
             ViewData["SenderId"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
-
-        // POST: Message/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MessageId,SenderId,ReceiverId,Content,DateSent,IsRead")] Message message)
@@ -96,7 +89,6 @@ namespace GameSiteProject.Controllers
             return View(message);
         }
 
-        // GET: Message/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             await SetNicknameAsync();
@@ -114,10 +106,7 @@ namespace GameSiteProject.Controllers
             ViewData["SenderId"] = new SelectList(_context.User, "Id", "Id", message.SenderId);
             return View(message);
         }
-
-        // POST: Message/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MessageId,SenderId,ReceiverId,Content,DateSent,IsRead")] Message message)
@@ -154,7 +143,6 @@ namespace GameSiteProject.Controllers
             return View(message);
         }
 
-        // GET: Message/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             await SetNicknameAsync();
@@ -176,7 +164,6 @@ namespace GameSiteProject.Controllers
             return View(message);
         }
 
-        // POST: Message/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -198,14 +185,12 @@ namespace GameSiteProject.Controllers
             return _context.Messages.Any(e => e.MessageId == id);
         }
         
-        // GET: Message/SendPrivateMessage
         public IActionResult SendPrivateMessage()
         {
             SetNicknameAsync().Wait();
             return View();
         }
 
-        // POST: Message/SendPrivateMessage
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendPrivateMessage(PrivateMessageViewModel model)
@@ -240,9 +225,9 @@ namespace GameSiteProject.Controllers
 
                 _context.Add(message);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Inbox)); // Redirect to the inbox after sending the message
+                return RedirectToAction(nameof(Inbox));
             }
-            return View(model); // Return the view with model state errors
+            return View(model);
         }
         
         public async Task<IActionResult> Inbox()
@@ -255,12 +240,11 @@ namespace GameSiteProject.Controllers
                 return NotFound();
             }
 
-            // Retrieve all messages where the current user is either the sender or the receiver, excluding messages with no receiver
             var messages = await _context.Messages
                 .Where(m => (m.SenderId == currentUser.Id || m.ReceiverId == currentUser.Id) && m.Receiver != null)
-                .Include(m => m.Sender)  // Include sender information (like nickname)
-                .Include(m => m.Receiver)  // Include receiver information (like nickname)
-                .OrderByDescending(m => m.DateSent)  // Optionally order by most recent
+                .Include(m => m.Sender)
+                .Include(m => m.Receiver)
+                .OrderByDescending(m => m.DateSent)
                 .ToListAsync();
 
             return View(messages);

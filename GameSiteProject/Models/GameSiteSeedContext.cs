@@ -7,7 +7,6 @@ public class GameSiteSeedContext
 {
     public static async Task SeedAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
     {
-        // Seeding User
         const string userEmail = "user@gmail.com";
         var user = await userManager.FindByEmailAsync(userEmail);
         if (user == null)
@@ -16,7 +15,6 @@ public class GameSiteSeedContext
             await userManager.CreateAsync(defaultUser, "password");
         }
 
-        // Seeding Admin
         const string adminEmail = "admin@gmail.com";
         user = await userManager.FindByEmailAsync(adminEmail);
         if (user == null)
